@@ -23,7 +23,7 @@ namespace Core.Helpers.ExcelHelper
             { "84", "Signal Below Allowable Range" },
             { "81", "Invalid Serial Data Received" },
             { "96", "Component Internal Failure" },
-            { "9E-", "Stuck ON" },
+            { "9E", "Stuck ON" },
             { "87", "Missing Message" },
             { "98", "Component or System Over Temperature" },
             { "17", "Circuit Voltage Above Threshold" },
@@ -89,7 +89,7 @@ namespace Core.Helpers.ExcelHelper
             var DTCs = new List<DTCModel>();
             using (ExcelPackage package = new ExcelPackage(filePath))
             {
-                var DTCSheet = package.Workbook.Worksheets.FirstOrDefault(x => x.Name.Trim().ToUpper().Contains("DTC"));
+                var DTCSheet = package.Workbook.Worksheets.FirstOrDefault(x => x.Name.Trim().ToUpper().Contains("DTC") && x.Name.Trim().ToUpper().Contains("LIST"));
                 if (DTCSheet == null)
                 {
                     Console.WriteLine("There is no DTC sheet in Excel package");
@@ -103,9 +103,9 @@ namespace Core.Helpers.ExcelHelper
                     {
                         new EPPCell( "ECUPin", new string[] {"ECU Pin", "Pin", "ECU Pin" }),
                         new EPPCell( "NumberHex",new string[] { "DTC Number (hex)" }),
-                        new EPPCell( "Number", new string[] { "DTC Number" }),
+                        new EPPCell( "Number", new string[] { "DTC Number", "DTC Display Number" }),
                         new EPPCell( "FailureTypeByte",new string[] { "Failure Type Byte", "Failure Type Byte and meaning" }),
-                        new EPPCell( "Name", new string[] { "DTC Name", "DTCName", "DTC-Name", "DTC_Name" }),
+                        new EPPCell( "Name", new string[] { "DTC Name", "DTCName", "DTC-Name", "DTC_Name" ,"SOC initialization error of Pack"}),
                         new EPPCell( "Priority", new string[] { "Priority" }),
                         new EPPCell( "LampFlag", new string[] { "Lamp Flag" }),
                         new EPPCell( "FailureTypeDefinition", new string[] { "DTC Failure Type Definition(if necessary)", "DTC Failure Type Definition" }),
@@ -122,7 +122,9 @@ namespace Core.Helpers.ExcelHelper
                         new EPPCell( "LocalSnapshot", new string[] { "local snapshot Record" }),
                     };
                     //Xác định các cell header
-                    for (int i = 1; i < 4; i++) 
+                    startRow = 999;
+                    int start = ECU.Contains("EAC") ? 2 : 1;
+                    for (int i = start; i < startRow-1; i++) 
                     {
                         for (int j = 1; j <= 30; j++) 
                         {
@@ -130,7 +132,7 @@ namespace Core.Helpers.ExcelHelper
                             {
                                 if (DTCSheet.Cells[i, j].Value == null) continue;
 
-                                var cellValue = DTCSheet.Cells[i, j].Value.ToString()?.ToLower().Replace(" ", "").Replace("_", "");
+                                var cellValue = DTCSheet.Cells[i, j].Value.ToString()?.ToLower().Replace(" ", "").Replace("_", "").Replace("-", "").Replace("\n", "").Replace("\r", "");
 
                                 if (string.IsNullOrEmpty(cellValue)) continue;
 
@@ -141,7 +143,7 @@ namespace Core.Helpers.ExcelHelper
                                         item.Row = i;
                                         item.Col = j;
                                         startRow = i + 1;
-                                        continue;
+                                        break;
                                     }
                                 }
                             }
@@ -151,20 +153,12 @@ namespace Core.Helpers.ExcelHelper
                             }
                         }
                     }
-                    //foreach (var item in ListHeader)
-                    //{
-                    //    if (!item.IsHaveContent())
-                    //    {
-                    //        Console.WriteLine($"There is no column {item.Name}");
-                    //    }
-                    //}
                     //Duyệt cả sheet để lấy content
                     bool isEnd = false;
                     for (int row = startRow; row <= rowMax; row++)
                     {
                         var DTC = new DTCModel();
                         DTC.ECUName = ECU;
-                        bool isHaveContent = false; 
                         for (int col = 1; col <= 30; col++)
                         {
                             try
@@ -174,70 +168,72 @@ namespace Core.Helpers.ExcelHelper
                                 var cellValue = DTCSheet.Cells[row, col].Value.ToString()?.Replace("\r", "").Replace("\n", "").Trim();
 
                                 if (string.IsNullOrEmpty(cellValue)) continue;
-                                isHaveContent = true;
                                 foreach (var item in ListHeader)
                                 {
-                                    if (item.Col != col) continue;
-                                    switch (item.Name)
+                                    if (item.Col == col)
                                     {
-                                        case "ECUPin":
-                                            DTC.ECUPin = cellValue;
-                                            break;
-                                        case "NumberHex":
-                                            DTC.DTCNumberHex = cellValue;
-                                            break;
-                                        case "Number":
-                                            DTC.DTCNumber = FormatDtcNumber(cellValue);
-                                            break;
-                                        case "FailureTypeByte":
-                                            DTC.FailureType = FormatFailureTypeByte(cellValue);
-                                            break;
-                                        case "Name":
-                                            DTC.Name = cellValue;
-                                            break;
-                                        case "Priority":
-                                            DTC.Priority = cellValue;
-                                            break;
-                                        case "LampFlag":
-                                            //DTC.Lam = cellValue;
-                                            break;
-                                        case "FailureTypeDefinition":
-                                            DTC.DTCFailureDefinition = cellValue;
-                                            break;
-                                        case "RepairAction":
-                                            DTC.RepairAction = cellValue;
-                                            break;
-                                        case "MonitorType":
-                                            DTC.MonitorType = cellValue;
-                                            break;
-                                        case "MonitorRate":
-                                            DTC.MonitorRate = cellValue;
-                                            break;
-                                        case "TestFailed":
-                                            DTC.TestFailedCriteria = cellValue;
-                                            break;
-                                        case "MatureTime":
-                                            DTC.MatureTime = cellValue;
-                                            break;
-                                        case "TestPass":
-                                            DTC.TestPass = cellValue;
-                                            break;
-                                        case "ServiceRelevant":
-                                            //DTC.Ser = cellValue;
-                                            break;
-                                        case "DematureTime":
-                                            DTC.DeMatureTime = cellValue;
-                                            break;
-                                        case "FaultSymptoms":
-                                            DTC.FaultSymptoms = cellValue;
-                                            break;
-                                        case "Aging":
-                                            DTC.DTCAging = cellValue;
-                                            break;
-                                        case "LocalSnapshot":
-                                            //DTC. = cellValue;
-                                            break;
-                                    }
+                                        switch (item.Name)
+                                        {
+                                            case "ECUPin":
+                                                DTC.ECUPin = cellValue;
+                                                break;
+                                            case "NumberHex":
+                                                DTC.DTCNumberHex = cellValue;
+                                                break;
+                                            case "Number":
+                                                DTC.DTCNumber = FormatDtcNumber(cellValue);
+                                                break;
+                                            case "FailureTypeByte":
+                                                DTC.FailureType = FormatFailureTypeByte(cellValue);
+                                                break;
+                                            case "Name":
+                                                DTC.Name = cellValue;
+                                                break;
+                                            case "Priority":
+                                                DTC.Priority = cellValue;
+                                                break;
+                                            case "LampFlag":
+                                                //DTC.Lam = cellValue;
+                                                break;
+                                            case "FailureTypeDefinition":
+                                                DTC.DTCFailureDefinition = cellValue;
+                                                break;
+                                            case "RepairAction":
+                                                DTC.RepairAction = cellValue;
+                                                break;
+                                            case "MonitorType":
+                                                DTC.MonitorType = cellValue;
+                                                break;
+                                            case "MonitorRate":
+                                                DTC.MonitorRate = cellValue;
+                                                break;
+                                            case "TestFailed":
+                                                DTC.TestFailedCriteria = cellValue;
+                                                break;
+                                            case "MatureTime":
+                                                DTC.MatureTime = cellValue;
+                                                break;
+                                            case "TestPass":
+                                                DTC.TestPass = cellValue;
+                                                break;
+                                            case "ServiceRelevant":
+                                                //DTC.Ser = cellValue;
+                                                break;
+                                            case "DematureTime":
+                                                DTC.DeMatureTime = cellValue;
+                                                break;
+                                            case "FaultSymptoms":
+                                                DTC.FaultSymptoms = cellValue;
+                                                break;
+                                            case "Aging":
+                                                DTC.DTCAging = cellValue;
+                                                break;
+                                            case "LocalSnapshot":
+                                                //DTC. = cellValue;
+                                                break;
+                                        }
+                                        break;
+                                    } 
                                 }
                             }
                             catch
@@ -247,42 +243,41 @@ namespace Core.Helpers.ExcelHelper
                             }
                         }
                         if (isEnd) break;
-                        if(isHaveContent) DTCs.Add(DTC);
+                        if(!string.IsNullOrEmpty(DTC.DTCNumber) && !string.IsNullOrEmpty(DTC.Name) && !string.IsNullOrEmpty(DTC.DTCNumberHex)) DTCs.Add(DTC);
                     }
                 }
             }
-            Console.WriteLine($"Export DTC of {ECU} => Count = {DTCs.Count}");
             return DTCs;
-        }
-        public static string FormatDtcNumber(string input)
-        {
-            var sanitizedInput = input.Replace(" ", "").Replace("-", "").Replace("_", "").ToUpperInvariant();
-            if (input.Length == 7 && input.Skip(1).All(char.IsDigit))
+            static string FormatDtcNumber(string input)
             {
-                return input.Substring(0, 5) + "-" + input.Substring(5);
-            }
-            return input;
-        }
-        public static string FormatFailureTypeByte(string input)
-        {
-            var basic = input.Replace(" ", "").Replace("0x","").Replace("_","-");
-            var parts = basic.Split('-');
-            if (parts.Length == 2)
-            {
-                return parts[0] + " - " + parts[1];
-            }
-            else if (parts.Length == 1)
-            {
-                if(TypeBytes.ContainsKey(parts[0]))
+                var sanitizedInput = input.Replace(" ", "").Replace("-", "").Replace("_", "").ToUpperInvariant();
+                if (input.Length == 7 && input.Skip(1).All(char.IsDigit))
                 {
-                    return parts[0] + " - " + TypeBytes[parts[0]];
+                    return input.Substring(0, 5) + "-" + input.Substring(5);
                 }
-                else if (basic.Contains("n.a"))
-                {
-                    return basic.Substring(0, 2) + " - " + input.Substring(2);
-                }
+                return input;
             }
-            return basic;
+            static string FormatFailureTypeByte(string input)
+            {
+                var basic = input.Replace("0x", "").Replace("_", "-");
+                var parts = basic.Split('-');
+                if (parts.Length == 2)
+                {
+                    return parts[0].Trim() + " - " + parts[1].Trim();
+                }
+                else if (parts.Length == 1)
+                {
+                    if (TypeBytes.ContainsKey(parts[0]))
+                    {
+                        return parts[0].Trim() + " - " + TypeBytes[parts[0]];
+                    }
+                    else if (basic.Contains("n.a"))
+                    {
+                        return input.Substring(0, 2).Trim() + " - " + input.Substring(2).Trim();
+                    }
+                }
+                return basic;
+            }
         }
     }
 }
