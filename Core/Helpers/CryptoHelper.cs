@@ -46,29 +46,50 @@ namespace Core.Helpers
     }
     public class FWCrytoHelper
     {
+        public static byte[] Encrypt(Stream input)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Key = ConvertHelper.HexToBytes("f3f793219cfc0de671e1281c97bc9cca4d522733da29b6f5e143858a77553d76");
+                aes.IV = Convert.FromBase64String("BgFNb+SmquW6Xk0acMZIqw=="); ;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+                var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                using var reader = new BinaryReader(input);
+                var plainBytes = reader.ReadBytes((int)input.Length);
+                var encryptedBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+                return encryptedBytes;
+            }
+        }
+
         public static Stream Decrypt(Stream input, byte[] key)
         {
             using (var reader = new BinaryReader(input))
             {
+
                 byte[] magicNumber = reader.ReadBytes(8);
                 Console.WriteLine("Magic Number : " + Encoding.UTF8.GetString(magicNumber));
 
                 int version = ReadInt32BigEndian(reader);
                 Console.WriteLine("version : " + version);
 
+
                 int signLength = ReadInt32BigEndian(reader);
                 byte[] signature = reader.ReadBytes(signLength);
                 Console.WriteLine("signature : " + Convert.ToBase64String(signature));
 
+    
                 int hashLength = ReadInt32BigEndian(reader);
                 byte[] hash = reader.ReadBytes(hashLength);
                 Console.WriteLine("hash : " + Convert.ToBase64String(hash));
-
+           
                 int _hmacLength = ReadInt32BigEndian(reader);
                 byte[] _hmac = reader.ReadBytes(_hmacLength);
 
                 byte[] iv = reader.ReadBytes(16);
                 Console.WriteLine("IV : " + Convert.ToBase64String(iv));
+        
+                
                 return Decrypt(input, key, iv);
             }
         }

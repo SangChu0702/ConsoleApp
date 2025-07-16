@@ -27,4 +27,26 @@ namespace Core.Helpers
             return upperCase ? hex.ToUpperInvariant() : hex.ToLowerInvariant();
         }
     }
+    public class ByteHelper
+    {
+        public static byte[] TrimPadding(byte[] input, byte[] paddingValues)
+        {
+            int start = 0;
+            int end = input.Length - 1;
+
+            while (start <= end && paddingValues.Contains(input[start]))
+                start++;
+
+            while (end >= start && paddingValues.Contains(input[end]))
+                end--;
+
+            int length = end - start + 1;
+            if (length <= 0)
+                return Array.Empty<byte>();
+
+            return input.Skip(start).Take(length).ToArray();
+        }
+    }
+
+
 }

@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Core.Helpers.ExcelHelper
+namespace Core.Helpers.Excel
 {
     public class ODXHelper
     {
@@ -83,10 +84,10 @@ namespace Core.Helpers.ExcelHelper
             { "30", "No Sub Type Information" }
 
         };
-        public static List<DTCModel> GetDTCDataFromExcel(string ECU, string filePath)
+        public static List<DTCData> GetDTCDataFromExcel(string ECU, string filePath)
         {
             ExcelPackage.License.SetNonCommercialPersonal("Sang");
-            var DTCs = new List<DTCModel>();
+            var DTCs = new List<DTCData>();
             using (ExcelPackage package = new ExcelPackage(filePath))
             {
                 var DTCSheet = package.Workbook.Worksheets.FirstOrDefault(x => x.Name.Trim().ToUpper().Contains("DTC") && x.Name.Trim().ToUpper().Contains("LIST"));
@@ -99,12 +100,12 @@ namespace Core.Helpers.ExcelHelper
                     var colMax = DTCSheet.Dimension.End.Column;
                     var rowMax = DTCSheet.Dimension.End.Row;
                     var startRow = 0;
-                    var ListHeader = new List<EPPCell> 
+                    var ListHeader = new List<EPPCell>
                     {
                         new EPPCell( "ECUPin", new string[] {"ECU Pin", "Pin", "ECU Pin" }),
-                        new EPPCell( "NumberHex",new string[] { "DTC Number (hex)" }),
+                        new EPPCell( "NumberHex",new string[] { "DTC Number (hex)", "DTC Number Hex" }),
                         new EPPCell( "Number", new string[] { "DTC Number", "DTC Display Number" }),
-                        new EPPCell( "FailureTypeByte",new string[] { "Failure Type Byte", "Failure Type Byte and meaning" }),
+                        new EPPCell( "FailureTypeByte",new string[] { "Failure Type Byte", "Failure Type Byte and meaning", "FTB (hex)" }),
                         new EPPCell( "Name", new string[] { "DTC Name", "DTCName", "DTC-Name", "DTC_Name" ,"SOC initialization error of Pack"}),
                         new EPPCell( "Priority", new string[] { "Priority" }),
                         new EPPCell( "LampFlag", new string[] { "Lamp Flag" }),
@@ -124,24 +125,21 @@ namespace Core.Helpers.ExcelHelper
                     //Xác định các cell header
                     startRow = 999;
                     int start = ECU.Contains("EAC") ? 2 : 1;
-                    for (int i = start; i < startRow-1; i++) 
+                    for (int i = start; i < startRow - 1; i++)
                     {
-                        for (int j = 1; j <= 30; j++) 
+                        for (int j = 1; j <= 30; j++)
                         {
                             try
                             {
                                 if (DTCSheet.Cells[i, j].Value == null) continue;
-
                                 var cellValue = DTCSheet.Cells[i, j].Value.ToString()?.ToLower().Replace(" ", "").Replace("_", "").Replace("-", "").Replace("\n", "").Replace("\r", "");
-
                                 if (string.IsNullOrEmpty(cellValue)) continue;
-
                                 foreach (var item in ListHeader)
                                 {
                                     if (item.IsContainValue(cellValue))
                                     {
                                         item.Row = i;
-                                        item.Col = j;
+                                        item.Col = item.Col != 0 ? item.Col : j;
                                         startRow = i + 1;
                                         break;
                                     }
@@ -157,7 +155,7 @@ namespace Core.Helpers.ExcelHelper
                     bool isEnd = false;
                     for (int row = startRow; row <= rowMax; row++)
                     {
-                        var DTC = new DTCModel();
+                        var DTC = new DTCData();
                         DTC.ECUName = ECU;
                         for (int col = 1; col <= 30; col++)
                         {
@@ -178,7 +176,7 @@ namespace Core.Helpers.ExcelHelper
                                                 DTC.ECUPin = cellValue;
                                                 break;
                                             case "NumberHex":
-                                                DTC.DTCNumberHex = cellValue;
+                                                DTC.DTCNumberHex = cellValue.Replace("0x", "").Replace("0X", "");
                                                 break;
                                             case "Number":
                                                 DTC.DTCNumber = FormatDtcNumber(cellValue);
@@ -233,7 +231,7 @@ namespace Core.Helpers.ExcelHelper
                                                 break;
                                         }
                                         break;
-                                    } 
+                                    }
                                 }
                             }
                             catch
@@ -243,41 +241,71 @@ namespace Core.Helpers.ExcelHelper
                             }
                         }
                         if (isEnd) break;
-                        if(!string.IsNullOrEmpty(DTC.DTCNumber) && !string.IsNullOrEmpty(DTC.Name) && !string.IsNullOrEmpty(DTC.DTCNumberHex)) DTCs.Add(DTC);
+                        //For VFe34
+                        if (ECU == "VCU" && !string.IsNullOrEmpty(DTC.DTCNumber))
+                        {
+                            DTC.DTCNumber = FormatDtcNumberForVCU(DTC.DTCNumber, DTC.FailureType.Substring(0, 2));
+                            DTC.DTCNumberHex = DtcNumberToDtcNumberHex(DTC.DTCNumber);
+                        }
+                        //if (DTC.DTCNumberHex.Trim().Length < 6) DTC.DTCNumberHex = DtcNumberToDtcNumberHex(DTC.DTCNumber);
+                        if (!string.IsNullOrEmpty(DTC.DTCNumber) && !string.IsNullOrEmpty(DTC.Name) && !string.IsNullOrEmpty(DTC.DTCNumberHex)) DTCs.Add(DTC);
                     }
                 }
             }
             return DTCs;
-            static string FormatDtcNumber(string input)
+        }
+        private static string FormatDtcNumber(string input)
+        {
+            var formated = input.Replace(" ", "").Replace("-", "").Replace("_", "").ToUpperInvariant();
+            if (formated.Length == 7)
             {
-                var sanitizedInput = input.Replace(" ", "").Replace("-", "").Replace("_", "").ToUpperInvariant();
-                if (input.Length == 7 && input.Skip(1).All(char.IsDigit))
-                {
-                    return input.Substring(0, 5) + "-" + input.Substring(5);
-                }
-                return input;
+                return formated.Substring(0, 5) + "-" + formated.Substring(5);
             }
-            static string FormatFailureTypeByte(string input)
+            return formated;
+        }
+        private static string FormatFailureTypeByte(string input)
+        {
+            var basic = input.Replace("0x", "").Replace("_", "-");
+            var parts = basic.Split('-');
+            if (parts.Length == 2)
             {
-                var basic = input.Replace("0x", "").Replace("_", "-");
-                var parts = basic.Split('-');
-                if (parts.Length == 2)
-                {
-                    return parts[0].Trim() + " - " + parts[1].Trim();
-                }
-                else if (parts.Length == 1)
-                {
-                    if (TypeBytes.ContainsKey(parts[0]))
-                    {
-                        return parts[0].Trim() + " - " + TypeBytes[parts[0]];
-                    }
-                    else if (basic.Contains("n.a"))
-                    {
-                        return input.Substring(0, 2).Trim() + " - " + input.Substring(2).Trim();
-                    }
-                }
-                return basic;
+                return parts[0].Trim() + " - " + parts[1].Trim();
             }
+            else if (parts.Length == 1)
+            {
+                if (TypeBytes.ContainsKey(parts[0]))
+                {
+                    return parts[0].Trim() + " - " + TypeBytes[parts[0]];
+                }
+                else if (basic.Contains("n.a"))
+                {
+                    return input.Substring(0, 2).Trim() + " - " + input.Substring(2).Trim();
+                }
+            }
+            return basic;
+        }
+        private static string FormatDtcNumberForVCU(string input, string failureByte)
+        {
+            if (input.Length < 7)
+            {
+                return input + "-" + failureByte;
+            }
+            return input;
+        }
+        private static string DtcNumberToDtcNumberHex(string input)
+        {
+            input = input.Replace("-", "");
+            if (input.Length != 7) return input;
+            byte letter = (byte)(input[0] switch
+            {
+                'P' => 0b00,
+                'C' => 0b01,
+                'B' => 0b10,
+                'U' => 0b11,
+                _ => throw new ArgumentException("Invalid letter")
+            } << 6 | (byte)input[1] << 4);
+            string fisrt = letter.ToString("X").Replace("-", "");
+            return fisrt[0] + input.Substring(2);
         }
     }
 }

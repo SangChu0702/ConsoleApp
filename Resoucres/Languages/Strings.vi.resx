@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Read_VIN" xml:space="preserve">
+    <value>Đọc VIN</value>
+  </data>
+  <data name="User_Department" xml:space="preserve">
+    <value>Bộ phận</value>
+  </data>
+  <data name="User_Information" xml:space="preserve">
+    <value>Thông tin người dùng</value>
+  </data>
+  <data name="User_Name" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="CheckTimer_Title" xml:space="preserve">
+    <value>Không thể kết nối với máy chủ</value>
+  </data>
+  <data name="CheckTimer_Content" xml:space="preserve">
+    <value>Ứng dụng có thể không hoạt động, vui lòng tắt phần mềm và thử lại</value>
+  </data>
+  <data name="Logout_Title" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+  <data name="Logout_Content" xml:space="preserve">
+    <value>Bạn cần đăng nhập để có thể sử dụng phần mềm, bạn có muốn tiếp tục không?</value>
+  </data>
+  <data name="Connect_Title" xml:space="preserve">
+    <value>Thiết bị đã được kết nối</value>
+  </data>
+  <data name="Disconnect_Title" xml:space="preserve">
+    <value>Thiết bị đã ngắt kết nối</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Kết nối</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Ngắt kết nối</value>
+  </data>
+  <data name="ConnectFail_Title" xml:space="preserve">
+    <value>Không thể kết nối thiết bị</value>
+  </data>
+  <data name="Select_Title" xml:space="preserve">
+    <value>Vui lòng chọn thiết bị</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Mẫu xe</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Trợ giúp</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Thông báo</value>
+  </data>
+  <data name="Select_device" xml:space="preserve">
+    <value>Chọn thiết bị</value>
+  </data>
+  <data name="ECU_not_resp" xml:space="preserve">
+    <value>ECU không phản hồi</value>
+  </data>
+  <data name="ECU_without_DTC" xml:space="preserve">
+    <value>ECU không có DTC</value>
+  </data>
+  <data name="ECU_with_DTC" xml:space="preserve">
+    <value>ECU có DTC</value>
+  </data>
+  <data name="Health_Check" xml:space="preserve">
+    <value>Kiểm tra xe</value>
+  </data>
+  <data name="Vehicle_DTC" xml:space="preserve">
+    <value>DTC của xe</value>
+  </data>
+  <data name="Save_Report" xml:space="preserve">
+    <value>Lưu báo cáo</value>
+  </data>
+  <data name="See_ECU_topology" xml:space="preserve">
+    <value>Kết nối với xe để xem cấu trúc các ECU</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="No_Header" xml:space="preserve">
+    <value>STT</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Làm mới</value>
+  </data>
+  <data name="Failure_Type" xml:space="preserve">
+    <value>Kiểu lỗi</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Tên</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="Snapshot" xml:space="preserve">
+    <value>Snapshot</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Chi tiết</value>
+  </data>
+  <data name="Clear_DTC" xml:space="preserve">
+    <value>Xóa DTC</value>
+  </data>
+  <data name="ECU_Info" xml:space="preserve">
+    <value>Thông tin ECU</value>
+  </data>
+  <data name="DTC_Info" xml:space="preserve">
+    <value>Thông tin DTC</value>
+  </data>
+  <data name="Data_Flow" xml:space="preserve">
+    <value>Luồng dữ liệu</value>
+  </data>
+  <data name="IO_Control" xml:space="preserve">
+    <value>Điều khiển IO</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Dịch vụ</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Quay lại</value>
+  </data>
+  <data name="Parameter" xml:space="preserve">
+    <value>Tham số</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Giá trị</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Đơn vị</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Thao tác</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Chạy</value>
+  </data>
+  <data name="Programming" xml:space="preserve">
+    <value>Nạp chương trình</value>
+  </data>
+  <data name="Write_VIN" xml:space="preserve">
+    <value>Ghi VIN</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Khởi động lại</value>
+  </data>
+  <data name="Write_Hardware" xml:space="preserve">
+    <value>Ghi mã phần cứng</value>
+  </data>
+  <data name="HV_Battery_Health_Report" xml:space="preserve">
+    <value>Tình trạng pin điện áp cao</value>
+  </data>
+  <data name="TPMS_ID" xml:space="preserve">
+    <value>TPMS ID (đọc và ghi)</value>
+  </data>
+  <data name="BAS_Calibration" xml:space="preserve">
+    <value>Hiệu chỉnh BAS</value>
+  </data>
+  <data name="Read_CDS_Coding" xml:space="preserve">
+    <value>Đọc tính năng CDS</value>
+  </data>
+  <data name="Write_CDS_Coding" xml:space="preserve">
+    <value>Ghi tính năng CDS</value>
+  </data>
+  <data name="Read_VOD_Coding" xml:space="preserve">
+    <value>Đọc tính năng VOD</value>
+  </data>
+  <data name="Write_VOD_Coding" xml:space="preserve">
+    <value>Ghi tính năng VOD</value>
+  </data>
+  <data name="Provision" xml:space="preserve">
+    <value>Định danh (Provision)</value>
+  </data>
+  <data name="Lock_Provision" xml:space="preserve">
+    <value>Khóa dữ liệu định danh (Lock Provision)</value>
+  </data>
+  <data name="Write_FRS_Number" xml:space="preserve">
+    <value>Ghi mã FRS</value>
+  </data>
+  <data name="SAS_Calibration" xml:space="preserve">
+    <value>Hiệu chỉnh SAS</value>
+  </data>
+  <data name="Connect_Required" xml:space="preserve">
+    <value>Vui lòng kết nối thiết bị trước</value>
+  </data>
+  <data name="Vincode_Miss_Match_Title" xml:space="preserve">
+    <value>Mã Vin không giống nhau giữa MHU và BCM</value>
+  </data>
+  <data name="Vincode_Miss_Match_Content" xml:space="preserve">
+    <value>Vui lòng nhập Vincode mong muốn</value>
+  </data>
+  <data name="Get_Latest_VDSA_Fail" xml:space="preserve">
+    <value>Không thể lấy phiên bản VDSA mới nhất từ máy chủ</value>
+  </data>
+  <data name="Not_Found_Update_Tool" xml:space="preserve">
+    <value>Không tìm thấy phần mềm cập nhập VDSA</value>
+  </data>
+  <data name="Please_Report" xml:space="preserve">
+    <value>Vui lòng báo cáo vấn đề này cho đội hỗ trợ của chúng tôi</value>
+  </data>
+  <data name="Update_Automatic" xml:space="preserve">
+    <value>Phần mềm sẽ cập nhập tự động khi tắt</value>
+  </data>
+  <data name="Update_Fail" xml:space="preserve">
+    <value>Cập nhập lỗi</value>
+  </data>
+  <data name="Download_Package_Fail" xml:space="preserve">
+    <value>Lỗi khi tải bản cập nhập</value>
+  </data>
+  <data name="Get_Access_Fail" xml:space="preserve">
+    <value>Không thể lấy quyền truy cập của bạn từ máy chủ</value>
+  </data>
+  <data name="Select_Model_Required" xml:space="preserve">
+    <value>Vui lòng chọn mẫu xe trước</value>
+  </data>
+  <data name="Miss_Data" xml:space="preserve">
+    <value>Thiếu dữ liệu của</value>
+  </data>
+  <data name="Get_Veh_Info_Fail" xml:space="preserve">
+    <value>Không thể lấy dữ liệu của xe từ máy chủ</value>
+  </data>
+  <data name="Get_FRS_Fail" xml:space="preserve">
+    <value>Không thể lấy thông tin FRS mới nhất từ máy chủ</value>
+  </data>
+  <data name="New_Ver_Available" xml:space="preserve">
+    <value>Phiên bản mới đã sẵn sàng</value>
+  </data>
+  <data name="Install_Required" xml:space="preserve">
+    <value>Bạn có muốn cài đặt ngay không</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Đang tải</value>
+  </data>
+  <data name="Immobiliser" xml:space="preserve">
+    <value>Immobiliser</value>
+  </data>
+  <data name="WriteFRS_Step1_Pass" xml:space="preserve">
+    <value>Lấy thành công thông tin FRS mới nhất từ máy chủ</value>
+  </data>
+  <data name="WriteFRS_Step1_Fail" xml:space="preserve">
+    <value>Không lấy được thông tin FRS mới nhất từ máy chủ</value>
+  </data>
+  <data name="WriteFRS_Step2_Pass" xml:space="preserve">
+    <value>Ghi FRS thành công</value>
+  </data>
+  <data name="WriteFRS_Step2_Fail" xml:space="preserve">
+    <value>Ghi FRS không thành công</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Lý do</value>
+  </data>
+  <data name="WriteFRS_Step2_Running" xml:space="preserve">
+    <value>Đang ghi mã FRS</value>
+  </data>
+  <data name="MHU_Recovery_Mode" xml:space="preserve">
+    <value>MHU Recovery Mode</value>
+  </data>
+  <data name="Flash_Vehicle" xml:space="preserve">
+    <value>CNPM xe</value>
+  </data>
+  <data name="Programming_Desc" xml:space="preserve">
+    <value>Quá trình cập nhật phần mềm là để nâng cấp phần mềm của ECU lên phiên bản phần mềm mới nhất</value>
+  </data>
+  <data name="Requirement" xml:space="preserve">
+    <value>Yêu cầu</value>
+  </data>
+  <data name="Programming_Req" xml:space="preserve">
+    <value>Đảm bảo máy tính được kết nối với máy sạc 12V, máy tính đủ nguồn và không tắt, khóa màn hình trong quá trình cập nhật phần mềm đang diễn ra,
+Xe được duy trì điện áp 12V và ở trạng thái đứng yên (P)</value>
+  </data>
+  <data name="Condition" xml:space="preserve">
+    <value>Điều kiện</value>
+  </data>
+  <data name="Programming_MHU_req" xml:space="preserve">
+    <value>Kết nối ECU với máy tính bằng dây kết nối USB</value>
+  </data>
+  <data name="Programming_MHU_MainReq" xml:space="preserve">
+    <value>Tuyệt đối không thao tác trên màn hình trong quá trình ứng dụng đang chạy</value>
+  </data>
+  <data name="Select_Language" xml:space="preserve">
+    <value>Chọn ngôn ngữ</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Thay đổi</value>
+  </data>
+  <data name="Reading_VIN" xml:space="preserve">
+    <value>Đọc VIN</value>
+  </data>
+</root>

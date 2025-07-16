@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Models
 {
-    public class DTCModel
+    public class DTCData
     {
         public string ECUPin { get; set; } = string.Empty;
         public string DTCNumberHex { get; set; } = string.Empty;
