@@ -48,5 +48,20 @@ namespace Core.Helpers
         }
     }
 
+    public class StringHelper
+    {
+        public static string RemoveNonLetterChar(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+            return new string(input.Where(char.IsLetter).ToArray());
+        }
+        public static string RemoveNonDigitChar(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+            return new string(input.Where(char.IsDigit).ToArray());
+        }
+    }
 
 }

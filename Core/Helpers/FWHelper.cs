@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.FirmwareFile;
 using Force.Crc32;
 
-namespace Core.Services
+namespace Core.Helpers
 {
-    public class FWLoader
+    public class FWHelper
     {
         public string GetCRC32(Firmware fw)
         {

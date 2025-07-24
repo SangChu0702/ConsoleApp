@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Core.Helpers;
 
 namespace Core.Models
 {
@@ -23,7 +24,8 @@ namespace Core.Models
             if(value == null) return false;
             foreach (var item in Values) 
             {
-                if (value.Contains(item.ToLower().Replace(" ", "").Replace("_", ""), StringComparison.OrdinalIgnoreCase)) return true;
+                string cleanItem = StringHelper.RemoveNonLetterChar(item);
+                if (value.Contains(cleanItem, StringComparison.OrdinalIgnoreCase)) return true;
             }
             return false;
         }

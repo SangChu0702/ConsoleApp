@@ -19,7 +19,7 @@ namespace Core.Helpers
 
             Log.Logger = new LoggerConfiguration()
                         .MinimumLevel.Debug()
-                        .WriteTo.Async(a => a.File(formatter: new TextFormatter() ,logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7, shared: true))
+                        .WriteTo.Async(a => a.File(formatter: new TextFormatter() , logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7, shared: true))
                         .CreateLogger();
 
             _isInitialized = true;

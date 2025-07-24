@@ -97,7 +97,6 @@ namespace Core.Helpers.Excel
                 }
                 else
                 {
-                    var colMax = DTCSheet.Dimension.End.Column;
                     var rowMax = DTCSheet.Dimension.End.Row;
                     var startRow = 0;
                     var ListHeader = new List<EPPCell>
